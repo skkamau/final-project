@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory | Inventory Tracker</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/script.js" defer></script>
+</head>
+<body data-page="inventory">
+  <header class="site-header"><div class="header-content">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">IT</span> Inventory Tracker</a>
+    <nav aria-label="Main navigation"><a href="index.html">Dashboard</a><a href="add-product.html">Add Product</a><a href="inventory.html" aria-current="page">Inventory</a></nav>
+  </div></header>
+  <main>
+    <div class="page-heading"><div><p class="eyebrow">MANAGE YOUR STOCK</p><h1>Inventory</h1><p>Find products and keep stock quantities up to date.</p></div><a class="button" href="add-product.html">+ Add Product</a></div>
+    <p id="storage-message" class="message error" role="alert" hidden></p>
+    <noscript><p class="message error">Please enable JavaScript to manage inventory.</p></noscript>
+    <section class="panel" aria-labelledby="inventory-heading">
+      <div class="section-heading"><div><h2 id="inventory-heading">All products</h2><p id="product-count">0 products</p></div><div class="search-field"><label for="search">Search by product name</label><input type="search" id="search" placeholder="Search products…"></div></div>
+      <p class="table-hint">Enter a new quantity and select Update. On small screens, scroll the table sideways.</p>
+      <p id="inventory-message" class="message" role="status" aria-live="polite" hidden></p>
+      <p id="inventory-empty" class="empty-state" role="status"></p>
+      <div id="table-container" class="table-scroll" tabindex="0" role="region" aria-label="Inventory table, scroll horizontally on small screens">
+        <table><caption class="visually-hidden">Products, stock levels and inventory values in KSh</caption><thead><tr><th scope="col">Product name</th><th scope="col">Category</th><th scope="col">Quantity</th><th scope="col">Unit price</th><th scope="col">Total value</th><th scope="col">Stock status</th><th scope="col">Actions</th></tr></thead><tbody id="inventory-body"></tbody></table>
+      </div>
+    </section>
+  </main>
+  <footer><p>Inventory Tracker · School project</p><p>Saved in this browser, on this device.</p></footer>
+</body>
+</html>
