@@ -81,6 +81,13 @@ function createTextElement(tagName, text, className) {
   return element;
 }
 
+function stockStatus(quantity) {
+  if (quantity < 5) {
+    return "Low stock";
+  }
+  return "In stock";
+}
+
 function showDashboard() {
   let totalQuantity = 0;
   let totalValue = 0;
@@ -124,27 +131,32 @@ function showLatestProduct() {
     return;
   }
   const product = products[products.length - 1];
-  latest.appendChild(createTextElement("h3", product.name));
-  latest.appendChild(createTextElement("p", product.category));
-  const details = document.createElement("dl");
-  const labels = ["Quantity", "Unit price", "Total value", "Stock status"];
-  let stockStatus = "In stock";
-  if (product.quantity < 5) {
-    stockStatus = "Low stock";
-  }
-  const values = [product.quantity, formatMoney(product.unitPrice), formatMoney(product.quantity * product.unitPrice), stockStatus];
-  for (let i = 0; i < labels.length; i++) {
-    const row = document.createElement("div");
-    row.appendChild(createTextElement("dt", labels[i]));
-    row.appendChild(createTextElement("dd", values[i]));
-    details.appendChild(row);
+  const details = document.getElementById("latest-template").content.cloneNode(true);
+  details.querySelector("h3").textContent = product.name;
+  details.querySelector(".latest-category").textContent = product.category;
+  const values = [product.quantity, formatMoney(product.unitPrice), formatMoney(product.quantity * product.unitPrice), stockStatus(product.quantity)];
+  const fields = details.querySelectorAll("dd");
+  for (let i = 0; i < values.length; i++) {
+    fields[i].textContent = values[i];
   }
   latest.appendChild(details);
 }
 
-function setFieldError(inputId, errorId, errorText) {
-  document.getElementById(errorId).textContent = errorText;
-  document.getElementById(inputId).setAttribute("aria-invalid", errorText !== "");
+// One function checks each field and displays its error beside the input.
+function validateField(inputId, errorId, type) {
+  const input = document.getElementById(inputId);
+  const value = input.value.trim();
+  let error = "";
+  if (value === "") {
+    error = "This field is required.";
+  } else if (type === "quantity" && !validQuantity(Number(value))) {
+    error = "Enter a whole number of 0 or more (within the safe number range).";
+  } else if (type === "price" && !validPrice(Number(value))) {
+    error = "Enter a numeric price of 0 or more.";
+  }
+  document.getElementById(errorId).textContent = error;
+  input.setAttribute("aria-invalid", error !== "");
+  return error === "";
 }
 
 function addProduct(event) {
@@ -158,32 +170,17 @@ function addProduct(event) {
   const category = categoryInput.value.trim();
   const quantity = Number(quantityInput.value);
   const unitPrice = Number(priceInput.value);
-  let nameError = "";
-  let categoryError = "";
-  let quantityError = "";
-  let priceError = "";
-  if (name === "") {
-    nameError = "Enter a product name.";
-  }
-  if (category === "") {
-    categoryError = "Enter a category.";
-  }
-  // Check for blank input before Number(), because Number("") is zero.
-  if (quantityInput.value.trim() === "" || !validQuantity(quantity)) {
-    quantityError = "Enter a whole number of 0 or more (within the safe number range).";
-  }
-  if (priceInput.value.trim() === "" || !validPrice(unitPrice)) {
-    priceError = "Enter a numeric price of 0 or more.";
-  } else if (!Number.isFinite(quantity * unitPrice)) {
-    priceError = "This stock value is too large. Enter a smaller price or quantity.";
-  }
-  setFieldError("product-name", "name-error", nameError);
-  setFieldError("category", "category-error", categoryError);
-  setFieldError("quantity", "quantity-error", quantityError);
-  setFieldError("unit-price", "price-error", priceError);
-  if (nameError || categoryError || quantityError || priceError) {
+  const nameValid = validateField("product-name", "name-error", "text");
+  const categoryValid = validateField("category", "category-error", "text");
+  const quantityValid = validateField("quantity", "quantity-error", "quantity");
+  const priceValid = validateField("unit-price", "price-error", "price");
+  if (!nameValid || !categoryValid || !quantityValid || !priceValid) {
     showMessage("form-message", "Please correct the highlighted fields, then save again.", true);
     document.querySelector('[aria-invalid="true"]').focus();
+    return;
+  }
+  if (!Number.isFinite(quantity * unitPrice)) {
+    showMessage("form-message", "This stock value is too large. Enter a smaller price or quantity.", true);
     return;
   }
   const product = { name: name, category: category, quantity: quantity, unitPrice: unitPrice };
@@ -248,56 +245,37 @@ function showInventory() {
       continue;
     }
     matchCount++;
-    const row = document.createElement("tr");
-    row.appendChild(createTextElement("td", product.name));
-    row.appendChild(createTextElement("td", product.category));
-    const quantityCell = document.createElement("td");
-    const input = document.createElement("input");
-    input.type = "number";
-    input.min = "0";
-    input.step = "1";
+    // Copy the HTML template, then fill it using textContent for safe text.
+    const row = document.getElementById("product-row").content.firstElementChild.cloneNode(true);
+    row.querySelector(".product-name").textContent = product.name;
+    row.querySelector(".product-category").textContent = product.category;
+    row.querySelector(".product-price").textContent = formatMoney(product.unitPrice);
+    row.querySelector(".product-value").textContent = formatMoney(product.quantity * product.unitPrice);
+    const input = row.querySelector("input");
     input.id = "stock-" + i;
     input.value = product.quantity;
-    input.className = "quantity-input";
-    const label = createTextElement("label", "Quantity for " + product.name, "visually-hidden");
+    const label = row.querySelector("label");
+    label.textContent = "Quantity for " + product.name;
     label.htmlFor = input.id;
-    const errorMessage = createTextElement("span", "", "field-error row-error");
+    const errorMessage = row.querySelector(".row-error");
     errorMessage.id = "stock-error-" + i;
-    errorMessage.setAttribute("role", "alert");
     input.setAttribute("aria-describedby", errorMessage.id);
-    quantityCell.appendChild(label);
-    quantityCell.appendChild(input);
-    quantityCell.appendChild(errorMessage);
-    row.appendChild(quantityCell);
-    row.appendChild(createTextElement("td", formatMoney(product.unitPrice)));
-    row.appendChild(createTextElement("td", formatMoney(product.quantity * product.unitPrice)));
-    const statusCell = document.createElement("td");
+    const status = row.querySelector(".stock-status");
+    status.textContent = stockStatus(product.quantity);
     if (product.quantity < 5) {
-      statusCell.appendChild(createTextElement("span", "Low stock", "badge low"));
-    } else {
-      statusCell.appendChild(createTextElement("span", "In stock", "badge"));
+      status.classList.add("low");
     }
-    row.appendChild(statusCell);
-    const actionsCell = document.createElement("td");
-    const actions = document.createElement("div");
-    actions.className = "actions";
-    const updateButton = createTextElement("button", "Update");
-    updateButton.type = "button";
+    const updateButton = row.querySelector(".update-button");
     updateButton.setAttribute("aria-label", "Update quantity for " + product.name);
     // let i gives each button the correct original array index, even after searching.
     updateButton.addEventListener("click", function () {
       updateQuantity(i, input, errorMessage);
     });
-    const deleteButton = createTextElement("button", "Delete", "delete-button");
-    deleteButton.type = "button";
+    const deleteButton = row.querySelector(".delete-button");
     deleteButton.setAttribute("aria-label", "Delete " + product.name);
     deleteButton.addEventListener("click", function () {
       deleteProduct(i);
     });
-    actions.appendChild(updateButton);
-    actions.appendChild(deleteButton);
-    actionsCell.appendChild(actions);
-    row.appendChild(actionsCell);
     tableBody.appendChild(row);
   }
   document.getElementById("product-count").textContent = matchCount + " of " + products.length + " products";

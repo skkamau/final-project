@@ -43,7 +43,9 @@ README.md           Project documentation
 
 Each HTML page loads the same CSS and JavaScript files. The `data-page` attribute on the body tells the script which page functions to run.
 
-The script loads an array of product objects. `showDashboard()` uses a loop to add quantities and calculate quantity multiplied by unit price. `addProduct()` checks the form before adding an object to the array. `showInventory()` loops through matching products and creates table rows. Each row's buttons use event listeners to update or delete the correct product.
+The script loads an array of product objects. `showDashboard()` uses a loop to add quantities and calculate quantity multiplied by unit price. `addProduct()` checks the form using the shared `validateField()` function before adding an object to the array. `showInventory()` loops through matching products and fills table rows. Each row's buttons use event listeners to update or delete the correct product.
+
+The inventory row and latest-product layout are written in HTML `<template>` elements. A template is hidden HTML that JavaScript can copy using `cloneNode(true)`. The script fills each copy with product data using `textContent`. Keeping these layouts in HTML reduces repetitive JavaScript and makes the page structure easier to edit.
 
 Important logic is explained with comments. User-entered text is displayed with `textContent`, so a product name containing HTML is displayed as ordinary text.
 
