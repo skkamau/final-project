@@ -131,4 +131,6 @@ Suggested repository description:
 
 > A simple inventory tracker built with HTML, CSS and JavaScript to manage products, track stock levels and calculate inventory value.
 
-The local project has Git commits on the `main` branch. No destination remote was configured when development started. After choosing the destination repository, push the project there and enable GitHub Pages to serve the `main` branch from the repository root. This static application needs no build step. The deployed site will start with an empty inventory in each visitor's browser.
+Repository: [skkamau/final-project](https://github.com/skkamau/final-project).
+
+The project uses the `main` branch with descriptive Git commits. To publish the website, open the repository's **Settings > Pages**, choose **Deploy from a branch**, select **main** and **/ (root)**, then save. This static application needs no build step. The deployed site will start with an empty inventory in each visitor's browser.
