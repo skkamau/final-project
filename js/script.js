@@ -119,7 +119,7 @@ function showDashboard() {
   if (products.length === 0) {
     emptyMessage.textContent = "No products yet. Add your first product to see your stock summary.";
   } else if (lowStockCount === 0) {
-    emptyMessage.textContent = "Stock looks good! All products have at least 5 units.";
+    emptyMessage.textContent = "No low-stock products. All products have at least 5 units.";
   } else {
     emptyMessage.hidden = true;
   }
