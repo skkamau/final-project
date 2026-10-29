@@ -41,15 +41,17 @@ js/script.js        Shared storage, validation and page logic
 README.md           Project documentation
 ```
 
-Each HTML page loads the same CSS and JavaScript files. The `data-page` attribute on the body tells the script which page functions to run.
+Each HTML page loads the same CSS and JavaScript files. The `id` on the body tells the script which page functions to run.
 
-The script loads an array of product objects. `showDashboard()` uses a loop to add quantities and calculate quantity multiplied by unit price. `addProduct()` checks the form using the shared `validateField()` function before adding an object to the array. `showInventory()` loops through matching products and fills table rows. Each row's buttons use event listeners to update or delete the correct product.
+The script loads an array of product objects. `showDashboard()` uses a loop to add quantities and calculate quantity multiplied by unit price. `addProduct()` uses explicit if statements to check each form field before adding an object to the array. `showInventory()` loops through matching products and creates table rows. Each row's buttons use event listeners to update or delete the correct product.
 
-The inventory row and latest-product layout are written in HTML `<template>` elements. A template is hidden HTML that JavaScript can copy using `cloneNode(true)`. The script fills each copy with product data using `textContent`. Keeping these layouts in HTML reduces repetitive JavaScript and makes the page structure easier to edit.
+The code uses ordinary named functions, variables, arrays, simple objects, for loops, if/else statements, arithmetic and string concatenation. Quantity validation uses the remainder operator (`quantity % 1`) to reject fractional numbers. There are no HTML templates, cloning, classes, arrow functions or destructuring in the application JavaScript.
 
 Important logic is explained with comments. User-entered text is displayed with `textContent`, so a product name containing HTML is displayed as ordinary text.
 
 The beginner-friendly structure was informed by the HTML, CSS and JavaScript examples in [Foundations- / week-one / first-web-page](https://github.com/mutuajoseph/Foundations-/tree/main/week-one/first-web-page).
+
+The tracker is new project code, not code copied from that repository. The reference demonstrates the basic language concepts and HTML forms and tables. This working tracker also needs browser methods that are not demonstrated in those reference files: `getElementById`, `createElement`, `appendChild`, `textContent`, `addEventListener`, `localStorage`, JSON conversion, numeric checks and `try/catch`. These support the original requirements for interactive pages, validation, safe text display, persistence and storage error handling. CSS Grid, Flexbox and media queries support the requested responsive layout.
 
 ## How to run and preview in VS Code
 

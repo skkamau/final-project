@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="css/style.css">
   <script src="js/script.js" defer></script>
 </head>
-<body data-page="inventory">
+<body id="inventory">
   <header class="site-header"><div class="header-content">
     <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">IT</span> Inventory Tracker</a>
     <nav aria-label="Main navigation"><a href="index.html">Dashboard</a><a href="add-product.html">Add Product</a><a href="inventory.html" aria-current="page">Inventory</a></nav>
@@ -24,16 +24,6 @@
       <div id="table-container" class="table-scroll" tabindex="0" role="region" aria-label="Inventory table, scroll horizontally on small screens">
         <table><caption class="visually-hidden">Products, stock levels and inventory values in KSh</caption><thead><tr><th scope="col">Product name</th><th scope="col">Category</th><th scope="col">Quantity</th><th scope="col">Unit price</th><th scope="col">Total value</th><th scope="col">Stock status</th><th scope="col">Actions</th></tr></thead><tbody id="inventory-body"></tbody></table>
       </div>
-      <!-- JavaScript copies this row for each product and fills in its values. -->
-      <template id="product-row">
-        <tr>
-          <td class="product-name"></td><td class="product-category"></td>
-          <td><label class="visually-hidden"></label><input class="quantity-input" type="number" min="0" step="1"><span class="field-error row-error" role="alert"></span></td>
-          <td class="product-price"></td><td class="product-value"></td>
-          <td><span class="badge stock-status"></span></td>
-          <td><div class="actions"><button type="button" class="update-button">Update</button><button type="button" class="delete-button">Delete</button></div></td>
-        </tr>
-      </template>
     </section>
   </main>
   <footer><p>Inventory Tracker · School project</p><p>Saved in this browser, on this device.</p></footer>
