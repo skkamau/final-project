@@ -21,13 +21,23 @@ main, footer {
 }
 a { color: #245982; }
 .site-header {
-  background-color: #eaf0f5;
-  border-bottom: 1px solid #b9c8d3;
+  background-color: #fff;
+  border-bottom: 2px solid #245982;
 }
 .header-content, main, footer {
   max-width: 1100px;
   margin: 0 auto;
   padding: 24px;
+}
+/* Keep the title and navigation on one line when there is enough space. */
+.header-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 18px;
+  padding-bottom: 18px;
 }
 .brand {
   font-size: 24px;
@@ -38,10 +48,25 @@ a { color: #245982; }
 nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
-  margin-top: 14px;
+  gap: 6px;
 }
-nav a[aria-current="page"] { color: #292929; font-weight: bold; }
+nav a {
+  display: block;
+  padding: 10px 14px;
+  border-bottom: 3px solid transparent;
+  text-decoration: none;
+  color: #394c5a;
+}
+nav a:hover {
+  background-color: #f0f4f7;
+  color: #245982;
+}
+nav a[aria-current="page"] {
+  background-color: #eaf0f5;
+  border-bottom-color: #245982;
+  color: #245982;
+  font-weight: bold;
+}
 h1 { font-size: 28px; margin: 0 0 8px; }
 h2 { font-size: 20px; margin: 0 0 12px; }
 h3 { font-size: 18px; }
@@ -161,6 +186,9 @@ footer p { margin: 0 0 4px; }
 /* Mobile layout. */
 @media (max-width: 600px) {
   .header-content, main, footer { padding: 18px; }
+  .header-content { flex-direction: column; align-items: flex-start; }
+  nav { width: 100%; gap: 4px; }
+  nav a { flex: 1; padding: 10px 8px; font-size: 14px; text-align: center; }
   .summary-grid, .field-grid { grid-template-columns: 1fr; }
   .page-heading, .section-heading, .stock-item {
     flex-direction: column;
