@@ -7,6 +7,17 @@ body {
   line-height: 1.5;
   color: #292929;
   background-color: white;
+  /* The image is in the project folder, one level above this CSS file. */
+  background-image: url("../images.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  min-height: 100vh;
+}
+
+/* A light background keeps the text readable over the picture. */
+main, footer {
+  background-color: rgba(255, 255, 255, 0.9);
 }
 a { color: #245982; }
 .site-header {
