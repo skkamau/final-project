@@ -1,10 +1,6 @@
-// PRODUCT DATA - an array of objects, like the arrays and objects in the reference.
-// All three pages read and write the same array under this one key.
 const storageKey = "inventoryTrackerProducts";
 let products = loadProducts();
 
-// getElementById finds an HTML element by its id.
-// textContent changes the text displayed inside that element.
 function showMessage(elementId, text, isError) {
   const message = document.getElementById(elementId);
   message.textContent = text;
@@ -16,7 +12,6 @@ function showMessage(elementId, text, isError) {
 }
 
 function validQuantity(quantity) {
-  // A whole number has no remainder when divided by 1.
   return Number.isFinite(quantity) && quantity >= 0 &&
     quantity % 1 === 0 && quantity <= 9007199254740991;
 }
@@ -37,7 +32,6 @@ function loadProducts() {
       return [];
     }
     const validProducts = [];
-    // Check saved objects too: browser storage can be edited outside the app.
     for (let i = 0; i < savedProducts.length; i++) {
       const product = savedProducts[i];
       if (product !== null && typeof product === "object" &&
@@ -60,8 +54,6 @@ function loadProducts() {
 
 function saveProducts() {
   try {
-    // localStorage keeps text after refresh. JSON converts our array to text.
-    // try/catch shows an error message if the browser cannot save the data.
     localStorage.setItem(storageKey, JSON.stringify(products));
     showMessage("storage-message", "", false);
     return true;
@@ -78,8 +70,6 @@ function formatMoney(amount) {
   });
 }
 
-// createElement makes an HTML element; appendChild adds it to the page.
-// textContent displays names literally instead of treating them as HTML code.
 function createTextElement(tagName, text, className) {
   const element = document.createElement(tagName);
   element.textContent = text;
@@ -89,7 +79,6 @@ function createTextElement(tagName, text, className) {
   return element;
 }
 
-// DASHBOARD - use a for loop to calculate totals, like calculateAverage in functions.js.
 function showDashboard() {
   let totalQuantity = 0;
   let totalValue = 0;
@@ -156,9 +145,8 @@ function setFieldError(inputId, errorId, errorText) {
   document.getElementById(inputId).setAttribute("aria-invalid", errorText !== "");
 }
 
-// ADD PRODUCT - read inputs, use if statements to validate, then save the object.
 function addProduct(event) {
-  event.preventDefault(); // Keep the form on this page instead of reloading it.
+  event.preventDefault();
   showMessage("form-message", "", false);
   const nameInput = document.getElementById("product-name");
   const categoryInput = document.getElementById("category");
@@ -178,7 +166,6 @@ function addProduct(event) {
   if (category === "") {
     categoryError = "Enter a category.";
   }
-  // Check for blank input before Number(), because Number("") is zero.
   if (quantityInput.value.trim() === "" || !validQuantity(quantity)) {
     quantityError = "Enter a whole number of 0 or more (within the safe number range).";
   }
@@ -204,7 +191,7 @@ function addProduct(event) {
     showLatestProduct();
     nameInput.focus();
   } else {
-    products.pop(); // Undo the in-memory addition if saving failed.
+    products.pop();
   }
 }
 
@@ -247,7 +234,6 @@ function deleteProduct(productIndex) {
   }
 }
 
-// INVENTORY - loop through the array and create a table row for each matching product.
 function showInventory() {
   const tableBody = document.getElementById("inventory-body");
   const searchText = document.getElementById("search").value.trim().toLowerCase();
@@ -295,7 +281,6 @@ function showInventory() {
     const updateButton = createTextElement("button", "Update");
     updateButton.type = "button";
     updateButton.setAttribute("aria-label", "Update quantity for " + product.name);
-    // let i gives each button the correct original array index, even after searching.
     updateButton.addEventListener("click", function () {
       updateQuantity(i, input, errorMessage);
     });
@@ -322,8 +307,6 @@ function showInventory() {
   }
 }
 
-// The same script runs only the functions needed by the current HTML page.
-// addEventListener runs a function when the user submits a form or clicks a button.
 const currentPage = document.body.id;
 if (currentPage === "dashboard") {
   showDashboard();

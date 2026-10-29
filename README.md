@@ -47,7 +47,7 @@ The script loads an array of product objects. `showDashboard()` uses a loop to a
 
 The code uses ordinary named functions, variables, arrays, simple objects, for loops, if/else statements, arithmetic and string concatenation. Quantity validation uses the remainder operator (`quantity % 1`) to reject fractional numbers. There are no HTML templates, cloning, classes, arrow functions or destructuring in the application JavaScript.
 
-Important logic is explained with comments. User-entered text is displayed with `textContent`, so a product name containing HTML is displayed as ordinary text.
+User-entered text is displayed with `textContent`, so a product name containing HTML is displayed as ordinary text.
 
 The beginner-friendly structure was informed by the HTML, CSS and JavaScript examples in [Foundations- / week-one / first-web-page](https://github.com/mutuajoseph/Foundations-/tree/main/week-one/first-web-page).
 
